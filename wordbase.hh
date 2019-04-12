@@ -11,7 +11,8 @@ int const CARD_COUNT = 5;
 class WordBase : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QVector<int> colors READ currentColors NOTIFY colorschanged)
+    Q_PROPERTY(QVector<int> colors READ currentColors NOTIFY colorsChanged)
+    Q_PROPERTY(QVector<QString> words READ currentWords NOTIFY wordsChanged)
 
 public:
     explicit WordBase(QObject *parent = nullptr);
@@ -19,21 +20,23 @@ public:
     //WordBase(std::string const& filename);
     ~WordBase();
     void readWords(std::string const& filename);
-    size_t size() const;
-    std::vector<std::string> currentLine() const;
+    int size() const;
     QVector<int> currentColors() const;
+    QVector<QString> currentWords() const;
     void changeColors();
+    void changeWords();
 
 signals:
-    void colorschanged();
+    void colorsChanged();
+    void wordsChanged();
 
 private:
     bool initialized_;
-    std::vector<std::vector<std::string>> wordBase_;
+    QVector<QVector<QString>> wordBase_;
     QVector<int> colors_;
 
     // splits a line of words and appends it to wordbase
-    std::vector<std::string> splitLine(std::string& line);
+    QVector<QString> splitLine(std::string& line);
     void trimLine(std::string& line);
 };
 

@@ -21,7 +21,7 @@ Rectangle {
 
     Text {
         id: word
-        text: "tarhapöllö"
+        text: wb.words[cardRoot.cardNumber]
         anchors.centerIn: parent
         font.pixelSize: parent.height * .05
         style: Text.Sunken
@@ -44,6 +44,4 @@ Rectangle {
         anchors.fill: parent
         onClicked: { parent.open = true }
     }
-
-    Keys.onPressed: { if (event.key === Qt.Key_Enter) console.log("enter");}
 }

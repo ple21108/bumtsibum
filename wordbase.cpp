@@ -30,7 +30,7 @@ void WordBase::readWords(std::string const& filename)
     file.open(filename);
 
     while (std::getline(file, line)) {
-        std::vector<std::string> splitted = splitLine(line);
+        QVector<QString> splitted = splitLine(line);
         wordBase_.push_back(splitted);
     }
 
@@ -38,7 +38,7 @@ void WordBase::readWords(std::string const& filename)
     initialized_ = true;
 }
 
-size_t WordBase::size() const
+int WordBase::size() const
 {
     return wordBase_.size();
 }
@@ -48,14 +48,24 @@ QVector<int> WordBase::currentColors() const
     return colors_;
 }
 
-void WordBase::changeColors()
+QVector<QString> WordBase::currentWords() const
 {
-
+    return wordBase_.front();
 }
 
-std::vector<std::string> WordBase::splitLine(std::string& line)
+void WordBase::changeColors()
 {
-    std::vector<std::string> ret;
+    return;
+}
+
+void WordBase::changeWords()
+{
+    return;
+}
+
+QVector<QString> WordBase::splitLine(std::string& line)
+{
+    QVector<QString> ret;
     std::string delimiter = " ";
     size_t pos = 0;
     std::string token;
@@ -64,10 +74,10 @@ std::vector<std::string> WordBase::splitLine(std::string& line)
 
     while ((pos = line.find(delimiter)) != std::string::npos) {
         token = line.substr(0, pos);
-        ret.push_back(token);
+        ret.push_back(QString::fromStdString(token));
         line.erase(0, pos + delimiter.length());
     }
-    ret.push_back(line);
+    ret.push_back(QString::fromStdString(line));
     if (ret.size() != CARD_COUNT) {
         throw;
     }
