@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.5
 
 
 Window {
@@ -9,14 +10,12 @@ Window {
     height: 480
     title: qsTr("MEGALAULUILTAMA BUMTSIBUM!")
 
-    Shortcut {
-        sequence: StandardKey.Quit
-        context: Qt.ApplicationShortcut
-        onActivated: Qt.quit()
-    }
 
     Row {
         anchors.fill: parent
+        property bool empty: wb.empty
+
+        Keyboard {}
 
         Card {
             id: card0
@@ -37,6 +36,23 @@ Window {
         Card {
             id: card4
             cardNumber: 4
+        }
+    }
+
+    Dialog {
+        id: endDialog
+        title: qsTr("RIP")
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        modal: true
+        standardButtons: Dialog.Ok
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        onAccepted: Qt.quit();
+
+        Label {
+            text: "You ran out of words, exit program."
         }
     }
 }

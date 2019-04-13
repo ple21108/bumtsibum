@@ -2,11 +2,13 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <QtGlobal>
+#include <QDebug>
 
 WordBase::WordBase(QObject *parent) : QObject(parent)
 {
     initialized_ = false;
-    colors_ = {0, 1, 0, 1, 0};
+    colors_ = DEFAULT_COLORS;
 }
 
 WordBase::~WordBase()
@@ -38,7 +40,12 @@ void WordBase::readWords(std::string const& filename)
     initialized_ = true;
 }
 
-int WordBase::size() const
+bool WordBase::isEmpty() const
+{
+    return this->size() == 0;
+}
+
+size_t WordBase::size() const
 {
     return wordBase_.size();
 }
@@ -55,12 +62,31 @@ QVector<QString> WordBase::currentWords() const
 
 void WordBase::changeColors()
 {
+    QVector<int> newColors = DEFAULT_COLORS;
+    int i = 0;
+    while (!newColors.empty()) {
+        int index = rand() % newColors.size();
+        colors_[i] = newColors.at(index);
+        newColors.remove(index);
+        i++;
+    }
+    emit colorsChanged();
+    qDebug() << currentColors();
     return;
 }
 
-void WordBase::changeWords()
+bool WordBase::changeWords()
 {
-    return;
+    wordBase_.pop_front();
+    if (wordBase_.empty()) {
+        std::cerr << "No words in database." << std::endl;
+        emit emptied();
+        return false;
+    }
+    //int index = rand() % wordBase_.size();
+    emit wordsChanged();
+    qDebug() << currentWords();
+    return true;
 }
 
 QVector<QString> WordBase::splitLine(std::string& line)
@@ -90,6 +116,6 @@ void WordBase::trimLine(std::string &line)
     line.erase(0, first_not_ws);
     size_t last_not_ws = line.find_last_not_of(' ');
     line.erase(last_not_ws+1, line.size()-last_not_ws);
-
+    return;
 }
 

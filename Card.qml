@@ -12,6 +12,7 @@ Rectangle {
     property bool open: false
     property int cardNumber: 0
     property int textColor: wb.colors[cardNumber]
+
     width: parent.width*0.2
     height: parent.height*0.8
     color: "white"
