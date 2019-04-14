@@ -49,6 +49,7 @@ Item {
                 endDialog.open(); // When no more cards, exit with dialog
             }
             wb.changeColors();
+            console.log("Lines left: " + wb.size);
             break;
         default:
         }

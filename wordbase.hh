@@ -15,6 +15,7 @@ class WordBase : public QObject
     Q_PROPERTY(QVector<int> colors READ currentColors NOTIFY colorsChanged)
     Q_PROPERTY(QVector<QString> words READ currentWords NOTIFY wordsChanged)
     Q_PROPERTY(bool empty READ isEmpty NOTIFY emptied)
+    Q_PROPERTY(int size READ size)
 
 public:
     explicit WordBase(QObject *parent = nullptr);
