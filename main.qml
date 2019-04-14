@@ -5,14 +5,19 @@ import QtQuick.Controls 2.5
 
 
 Window {
+    id: win
     visible: true
     width: 640
     height: 480
     title: qsTr("MEGALAULUILTAMA BUMTSIBUM!")
-
+    color: "#990033"
 
     Row {
-        anchors.fill: parent
+        id: cardRow
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: parent.height*0.6
+
         property bool empty: wb.empty
 
         Keyboard {}
@@ -39,6 +44,52 @@ Window {
         }
     }
 
+    Rectangle {
+        id: botttomRect
+        width: parent.width
+        height: parent.height-cardRow.height
+        anchors.top: cardRow.bottom
+        color: "#990033"
+
+        Label {
+            id: buttons
+            anchors.top: parent.top
+            anchors.left: parent.left
+            font.pixelSize: parent.height * .05
+            text: qsTr("Kontrollit:
+1-5 (tai hiiri):
+R/C:
+N:
+Ctrl+q:")
+            color: "black"
+        }
+
+        Label {
+            id: buttonFunctions
+            anchors.top: parent.top
+            anchors.left: buttons.right
+            anchors.leftMargin: 15
+            font.pixelSize: parent.height * .05
+            text: qsTr("\nTogglettaa kortin tilaa (auki/kiinni)
+Piilottaa kortit (ei vaihda kortteja)
+Piilottaa ja vaihtaa kortit + arpoo uudet värit
+Quit")
+            color: "black"
+        }
+
+        Label {
+            id: nametag
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: parent.height * .2
+            text: qsTr("Megalauluiltama BumtsiBum!
+              22.04.2019")
+            color: "black"
+        }
+
+    }
+
+
     Dialog {
         id: endDialog
         title: qsTr("RIP")
@@ -51,8 +102,10 @@ Window {
 
         onAccepted: Qt.quit();
 
-        Label {
-            text: "You ran out of words, exit program."
+        Text {
+            text: "You ran out of words, press ok to exit program."
+
+            style: Text.Sunken
         }
     }
 }

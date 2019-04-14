@@ -79,7 +79,7 @@ bool WordBase::changeWords()
 {
     wordBase_.pop_front();
     if (wordBase_.empty()) {
-        std::cerr << "No words in database." << std::endl;
+        std::cout << "No words in database." << std::endl;
         emit emptied();
         return false;
     }

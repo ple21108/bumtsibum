@@ -14,8 +14,7 @@ Item {
         c.open = !c.open;
     }
 
-
-
+    // Ctrl+q always quits without confirm
     Shortcut {
         sequence: StandardKey.Quit
         context: Qt.ApplicationShortcut
@@ -25,6 +24,7 @@ Item {
     focus: true
     Keys.onPressed: {
         switch (event.key) {
+        // Number keys 1-5 toggle cards' flipping states
         case Qt.Key_1:
             flipCard(card0); break;
         case Qt.Key_2:
@@ -36,15 +36,17 @@ Item {
         case Qt.Key_5:
             flipCard(card4); break;
 
+        // Keys R and C hide all the cards (doesn't change the cards)
         case Qt.Key_R:
         case Qt.Key_C:
             hideCards();
             break;
 
+        // N key hides the cards, changes them and randomizes the colors
         case Qt.Key_N:
             hideCards();
             if (!wb.changeWords()) {
-                endDialog.open();
+                endDialog.open(); // When no more cards, exit with dialog
             }
             wb.changeColors();
             break;
