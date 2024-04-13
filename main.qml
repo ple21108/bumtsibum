@@ -20,7 +20,9 @@ Window {
 
         property bool empty: wb.empty
 
-        Keyboard {}
+        Keyboard {
+            id: kb
+        }
 
         Card {
             id: card0
@@ -45,66 +47,52 @@ Window {
     }
 
     Rectangle {
-        id: botttomRect
+        id: bottomRect
         width: parent.width
         height: parent.height-cardRow.height
         anchors.top: cardRow.bottom
         color: "#990033"
 
         Label {
-            id: buttons
-            anchors.top: parent.top
-            anchors.left: parent.left
-            font.pixelSize: parent.height * .05
-            text: qsTr("Kontrollit:
-1-5 (tai hiiri):
-R/C:
-N:
-Ctrl+q:")
-            color: "black"
-        }
-
-        Label {
-            id: buttonFunctions
-            anchors.top: parent.top
-            anchors.left: buttons.right
-            anchors.leftMargin: 15
-            font.pixelSize: parent.height * .05
-            text: qsTr("\nTogglettaa kortin tilaa (auki/kiinni)
-Piilottaa kortit (ei vaihda kortteja)
-Piilottaa ja vaihtaa kortit + arpoo uudet värit
-Quit")
-            color: "black"
-        }
-
-        Label {
             id: nametag
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: parent.height * .2
-            text: qsTr("Megalauluiltama BumtsiBum!
-              22.04.2019")
-            color: "black"
+            text: qsTr("Megalauluiltama BumtsiBum!")
+            color: "white"
         }
-
     }
-
 
     Dialog {
         id: endDialog
-        title: qsTr("RIP")
+        title: qsTr("IT'S OVER")
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
 
         modal: true
-        standardButtons: Dialog.Ok
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-        onAccepted: Qt.quit();
+        standardButtons: Dialog.Ok | Dialog.Close
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        onRejected: Qt.quit();
+        onAccepted: wb.readNextWords() ? {} : Qt.quit();
 
         Text {
-            text: "You ran out of words, press ok to exit program."
-
+            id: endDialogText
+            text: wb.empty ? "That's all folks!" : "End of game, press ok to start next game.";
+            //focus: true
+            Keys.onPressed: {
+                switch (event.key) {
+                case Qt.Key_N:
+                case Qt.Key_Return:
+                    endDialogText.focus = false;
+                    endDialog.focus = false;
+                    kb.forceActiveFocus();
+                    endDialog.accept();
+                    break;
+                default:
+                }
+                event.accepted = true;
+            }
             style: Text.Sunken
         }
     }

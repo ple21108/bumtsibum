@@ -3,15 +3,29 @@ import QtQuick 2.12
 Item {
 
     function hideCards() {
-        card0.open = false;
-        card1.open = false;
-        card2.open = false;
-        card3.open = false;
-        card4.open = false;
+        setCards(false);
+    }
+
+    function showCards() {
+        setCards(true);
+    }
+
+    function setCards(state) {
+        card0.open = state;
+        card1.open = state;
+        card2.open = state;
+        card3.open = state;
+        card4.open = state;
+        logCardStates();
     }
 
     function flipCard(c) {
         c.open = !c.open;
+        logCardStates();
+    }
+
+    function logCardStates() {
+        console.log("Card states: " + (card0.open ? 1 : 0) + " " + (card1.open ? 1 : 0) + " " + (card2.open ? 1 : 0) + " " + (card3.open ? 1 : 0) + " " + (card4.open ? 1 : 0))
     }
 
     // Ctrl+q always quits without confirm
@@ -39,17 +53,21 @@ Item {
         // Keys R and C hide all the cards (doesn't change the cards)
         case Qt.Key_R:
         case Qt.Key_C:
-            hideCards();
-            break;
+            hideCards(); break;
+
+        // A key shows all cards
+        case Qt.Key_A:
+            showCards(); break;
 
         // N key hides the cards, changes them and randomizes the colors
         case Qt.Key_N:
             hideCards();
             if (!wb.changeWords()) {
                 endDialog.open(); // When no more cards, exit with dialog
+                endDialogText.forceActiveFocus();
             }
             wb.changeColors();
-            console.log("Lines left: " + wb.size);
+            console.log("Rounds left: " + wb.size);
             break;
         default:
         }

@@ -22,13 +22,14 @@ public:
     //WordBase(QObject* parent = 0);
     //WordBase(std::string const& filename);
     ~WordBase();
-    void readWords(std::string const& filename);
+    bool addFiles(std::deque<std::string> const& files);
     bool isEmpty() const;
     size_t size() const;
     QVector<int> currentColors() const;
     QVector<QString> currentWords() const;
     Q_INVOKABLE void changeColors();
     Q_INVOKABLE bool changeWords();
+    Q_INVOKABLE bool readNextWords();
 
 signals:
     void colorsChanged();
@@ -37,9 +38,12 @@ signals:
 
 private:
     bool initialized_;
+    int fileIndex_;
+    std::deque<std::string> wordFiles_;
     std::deque<QVector<QString>> wordBase_;
     QVector<int> colors_;
 
+    bool readWords(std::string const& filename);
     // splits a line of words and appends it to wordbase
     QVector<QString> splitLine(std::string& line);
     void trimLine(std::string& line);

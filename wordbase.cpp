@@ -1,6 +1,5 @@
 #include "wordbase.hh"
 #include <fstream>
-#include <vector>
 #include <iostream>
 #include <QtGlobal>
 #include <QDebug>
@@ -24,12 +23,31 @@ WordBase::WordBase(std::string const& filename)
 }
 */
 
-void WordBase::readWords(std::string const& filename)
+bool WordBase::addFiles(std::deque<std::string> const& files)
 {
-    std::ifstream file;
-    std::string line;
+    wordFiles_ = files;
+    fileIndex_ = 0;
+    return readNextWords();
+}
 
-    file.open(filename);
+bool WordBase::readNextWords()
+{
+    if (wordFiles_.size() > 0) {
+        wordBase_ = std::deque<QVector<QString>>();
+        std::cout << "New game" << std::endl;
+        if (readWords(wordFiles_.front())) {
+            wordFiles_.pop_front();
+            emit wordsChanged();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool WordBase::readWords(std::string const& filename)
+{
+    std::ifstream file(filename);
+    std::string line;
 
     while (std::getline(file, line)) {
         QVector<QString> splitted = splitLine(line);
@@ -38,6 +56,9 @@ void WordBase::readWords(std::string const& filename)
 
     file.close();
     initialized_ = true;
+    qDebug() << "Total rounds: " << wordBase_.size();
+    qDebug() << currentWords();
+    return true;
 }
 
 bool WordBase::isEmpty() const
@@ -71,7 +92,7 @@ void WordBase::changeColors()
         i++;
     }
     emit colorsChanged();
-    qDebug() << currentColors();
+    qDebug() << "Colours (1=red):" << currentColors();
     return;
 }
 
@@ -79,8 +100,10 @@ bool WordBase::changeWords()
 {
     wordBase_.pop_front();
     if (wordBase_.empty()) {
-        std::cout << "No words in database." << std::endl;
-        emit emptied();
+        if (wordFiles_.empty()) {
+            std::cout << "No words in database." << std::endl;
+            emit emptied();
+        }
         return false;
     }
     //int index = rand() % wordBase_.size();
