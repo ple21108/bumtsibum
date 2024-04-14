@@ -24,11 +24,11 @@ Run the program as described previously. The controls are as follows:
 
 | key     | function                                      |
 | ------- | --------------------------------------------- |
-| 1-5:    | toggles the card's state (shown/hidden)       |
-| R/C:    | hides all cards (does not change words)       |
-| N:      | hides all cards and changes words and colours |
-| A:      | shows all cards                               |
-| Ctrl+q: | exits the program                             |
+| 1-5     | toggles the card's state (shown/hidden)       |
+| R/C     | hides all cards (does not change words)       |
+| N       | hides all cards and changes words and colours |
+| A       | shows all cards                               |
+| Ctrl+q  | exits the program                             |
 
 During the game, status messages are printed to console. These contain information such as the current words, their colours, as well as their states.
 
